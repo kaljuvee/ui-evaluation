@@ -1,0 +1,10 @@
+flask
+flask-cors
+fastapi
+uvicorn
+python-fasthtml
+fastui
+streamlit
+davia>=0.1.0
+pydantic>=2.0.0 
+davia

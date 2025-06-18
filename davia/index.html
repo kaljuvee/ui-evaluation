@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen">
+  <div class="w-full max-w-md p-4 bg-white rounded shadow">
+    <div id="chat" class="mb-4 h-40 overflow-y-auto"></div>
+    <input id="message" class="border p-2 w-full mb-2" placeholder="Ask le Chat" />
+    <button onclick="sendMessage()" class="bg-blue-500 text-white px-4 py-2 rounded">Send</button>
+    <form id="uploadForm" class="mt-4">
+      <input type="file" id="fileInput" class="mb-2" />
+      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Upload</button>
+    </form>
+  </div>
+  <script>
+    async function sendMessage() {
+      const msg = document.getElementById('message').value;
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: msg})
+      });
+      const data = await res.json();
+      document.getElementById('chat').innerHTML += `<div>${data.response}</div>`;
+    }
+    document.getElementById('uploadForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const file = document.getElementById('fileInput').files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/upload', {method: 'POST', body: formData});
+      const data = await res.json();
+      alert('Uploaded: ' + data.filename);
+    };
+  </script>
+</body>
+</html> 
